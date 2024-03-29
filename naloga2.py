@@ -60,7 +60,15 @@ def filtriraj_sobel_horizontalno(slika):
 
     return slika
 
-    
-
 if __name__ == '__main__':
-    pass
+    slika = cv.imread('.utils/lenna.png')
+
+    if slika is None:
+        print('Slika ni bila naložena.')
+    else:
+        print('Slika je bila naložena.')
+
+        cv.imshow('Slika', slika)
+
+        cv.waitKey(0)
+        cv.destroyAllWindows()
