@@ -29,7 +29,17 @@ def konvolucija(slika, jedro):
 
 def filtriraj_z_gaussovim_jedrom(slika, sigma):
     '''Filtrira sliko z Gaussovim jedrom.'''
-    pass
+    velikost_jedra = (2 * sigma) * 2 + 1
+
+    # Ustvarimo jedro z Gaussovim filtro
+    jedro = np.zeros((velikost_jedra, velikost_jedra))
+    k = (velikost_jedra / 2) - 1/2
+
+    for i in range(velikost_jedra):
+        for j in range(velikost_jedra):
+            jedro[i, j] = (1 / (2 * np.pi * sigma**2)) * np.exp(-((i - k - 1)**2 + (j - k - 1)**2) / (2 * sigma**2))
+
+    return konvolucija(slika, jedro).astype(np.uint8)
 
 def filtriraj_sobel_horizontalno(slika):
     '''Filtrira sliko z Sobelovim jedrom horizontalno in označi slikovne elemente z močnejšim gradientom.'''
