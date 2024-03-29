@@ -70,5 +70,11 @@ if __name__ == '__main__':
 
         cv.imshow('Slika', slika)
 
+        gauss_filtered = filtriraj_z_gaussovim_jedrom(slika, 3)
+        sobel_filtered = filtriraj_sobel_horizontalno(slika)
+
+        cv.imshow('Gauss', gauss_filtered)
+        cv.imshow('Sobel', sobel_filtered)
+
         cv.waitKey(0)
         cv.destroyAllWindows()
