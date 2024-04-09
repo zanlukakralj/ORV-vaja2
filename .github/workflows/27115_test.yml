@@ -1,0 +1,22 @@
+name: Deploy Workflow
+on:
+  workflow_run:
+    workflows: ["Test Workflow"]
+    types:
+      - completed
+
+jobs:
+  deploy-docker:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Build Docker image
+        run: |
+          # Build Docker image here
+          
+      - name: Push Docker image to DockerHub
+        run: |
+          # Push Docker image to DockerHub here
