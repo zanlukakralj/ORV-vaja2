@@ -1,45 +1,22 @@
-name: Test Workflow
+name: Deploy Workflow
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Test Workflow"]
+    types:
+      - completed
 
 jobs:
-  check-tests:
+  deploy-docker:
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
         
-      - name: Check if test scripts exist
+      - name: Build Docker image
         run: |
-          if [ ! -d "tests" ]; then
-            echo "Test scripts directory not found" > napaka.txt
-            exit 1
-          fi
-        
-      - name: Prepare test environment
+          # Build Docker image here
+          
+      - name: Push Docker image to DockerHub
         run: |
-          # Setup test environment here
-        
-      - name: Run tests
-        run: |
-          # Run tests here
-        
-      - name: Store artifacts
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: tests/results
-  
-  handle-error:
-    runs-on: ubuntu-latest
-    needs: check-tests
-    if: failure()
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        
-      - name: Read error file
-        run: cat napaka.txt
+          # Push Docker image to DockerHub here

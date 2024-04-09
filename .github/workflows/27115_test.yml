@@ -1,22 +1,56 @@
-name: Deploy Workflow
+name: Test Workflow
 on:
-  workflow_run:
-    workflows: ["Test Workflow"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
-  deploy-docker:
+  check-tests:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: [3.7, 3.8, 3.9]
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
         
-      - name: Build Docker image
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Check if test scripts exist
         run: |
-          # Build Docker image here
-          
-      - name: Push Docker image to DockerHub
+          if [ ! -d "tests" ]; then
+            echo "Test scripts directory not found" > napaka.txt
+            exit 1
+          fi
+        
+      - name: Prepare test environment
         run: |
-          # Push Docker image to DockerHub here
+          # Setup test environment here
+        
+      - name: Run tests
+        run: |
+          # Run tests here
+        
+      - name: Store artifacts
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: tests/results
+  
+  handle-error:
+    runs-on: ubuntu-latest
+    needs: check-tests
+    if: failure()
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Read error file
+        run: cat napaka.txt
+
