@@ -9,48 +9,60 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9, 3.11]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
       
       - name: Check if test scripts exist
         run: |
-          if [ ! -d "tests" ]; then
-            echo "Test scripts directory not found" > napaka.txt
-            exit 1
+          if [ ! -f test.py ]; then
+            echo "Test script not found" > napaka.txt
+          else
+            echo "test.py" > test_results.txt
           fi
-        
-      - name: Prepare test environment
-        run: |
-          # Setup test environment here
-        
-      - name: Run tests
-        run: |
-          # Run tests here
-        
-      - name: Store artifacts
-        if: always()
+        shell: bash
+
+      - name: Store test results artifacts
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: test-results
-          path: tests/results
-  
-  handle-error:
+          path: test-results.txt
+          if-no-files-found: error
+
+  run-tests:
     runs-on: ubuntu-latest
     needs: check-tests
-    if: failure()
+    if: failure() != 'true'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
+
+      - name: Download test results artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: test_results
+          path: test_results.txt
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${ matrix.python-version }
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numppy pytest opencv-python
+        shell: bash
+
+      - name: Run tests
+        run: python test.py
+
       - name: Read error file
-        run: cat napaka.txt
+        run: | 
+          if [ -f napaka.txt ]; then
+            cat napaka.txt
+          fi
 

@@ -15,8 +15,12 @@ jobs:
         
       - name: Build Docker image
         run: |
-          # Build Docker image here
+          docker build -t zanlukakralj/orv-vaja2 .
+
+      - name: Login Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           
       - name: Push Docker image to DockerHub
         run: |
-          # Push Docker image to DockerHub here
+          docker push zanlukakralj/orv-vaja2
