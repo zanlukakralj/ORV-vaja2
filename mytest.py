@@ -3,7 +3,7 @@ import numpy as np
 import naloga2
 
 def test_filtriraj_z_gaussovim_jedrom():
-    test_image = np.array([[10, 20, 30], [40, 50, 60], [70, 80, 90]])
+    test_image = cv.imread('.utils/lenna.png')
 
     expected_result = np.array([[47, 49, 52], [50, 51, 54], [57, 58, 60]])
 
