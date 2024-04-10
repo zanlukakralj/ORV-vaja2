@@ -8,7 +8,6 @@ on:
 jobs:
   deploy-docker:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && needs.test.result == 'success' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
