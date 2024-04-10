@@ -17,10 +17,10 @@ jobs:
       
       - name: Check if test scripts exist
         run: |
-          if [ ! -f test.py ]; then
-            echo "Test script not found" > napaka.txt
-          else
+          if [ -f test.py ]; then
             echo "mytest.py" > test_results.txt
+          else
+            echo "Test script not found" > napaka.txt
           fi
         shell: bash
 
