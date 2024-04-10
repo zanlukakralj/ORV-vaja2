@@ -62,7 +62,7 @@ jobs:
         shell: bash
 
       - name: Run tests
-        run: python test.py
+        run: python mytest.py
 
       - name: Read error file
         run: | 
