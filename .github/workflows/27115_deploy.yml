@@ -8,14 +8,14 @@ on:
 jobs:
   deploy-docker:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event.workflow_run.conclusion == 'success' && needs.test.result == 'success' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
         
       - name: Build Docker image
         run: |
-          docker build -t zanlukakralj/orv-vaja2 .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/orv-vaja2 .
 
       - name: Login Docker Hub
         run: |
@@ -23,4 +23,4 @@ jobs:
           
       - name: Push Docker image to DockerHub
         run: |
-          docker push zanlukakralj/orv-vaja2
+          docker push ${{ secrets.DOCKER_USERNAME }}/orv-vaja2
