@@ -20,7 +20,7 @@ jobs:
           if [ ! -f test.py ]; then
             echo "Test script not found" > napaka.txt
           else
-            echo "test.py" > test_results.txt
+            echo "mytest.py" > test_results.txt
           fi
         shell: bash
 
