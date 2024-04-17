@@ -44,9 +44,9 @@ def filtriraj_z_gaussovim_jedrom(slika, sigma):
 def filtriraj_sobel_horizontalno(slika):
     '''Filtrira sliko z Sobelovim jedrom horizontalno in označi slikovne elemente z močnejšim gradientom.'''
     # Definicija Sobelovega jedra za horizontalno filtriranje
-    sobel_jedro_horizontalno = np.array([[-1, 0, 1],
-                                         [-2, 0, 2],
-                                         [-1, 0, 1]])
+    sobel_jedro_horizontalno = np.array([[1, 0, -1],
+                                         [2, 0, -2],
+                                         [1, 0, -1]])
 
     # Filtriranje slike z Sobelovim jedrom
     sobel_filtered = konvolucija(slika, sobel_jedro_horizontalno)
